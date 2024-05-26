@@ -10,20 +10,64 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_25_215415) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_26_025604) do
+  create_table "event_team_users", force: :cascade do |t|
+    t.integer "event_id", null: false
+    t.integer "team_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_event_team_users_on_event_id"
+    t.index ["team_id"], name: "index_event_team_users_on_team_id"
+    t.index ["user_id"], name: "index_event_team_users_on_user_id"
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.string "title"
+    t.string "location"
+    t.datetime "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "roles", force: :cascade do |t|
     t.string "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "user_roles", force: :cascade do |t|
-    t.integer "user_id_id", null: false
-    t.integer "role_id_id", null: false
+  create_table "team_events", force: :cascade do |t|
+    t.integer "team_id", null: false
+    t.integer "event_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["role_id_id"], name: "index_user_roles_on_role_id_id"
-    t.index ["user_id_id"], name: "index_user_roles_on_user_id_id"
+    t.index ["event_id"], name: "index_team_events_on_event_id"
+    t.index ["team_id"], name: "index_team_events_on_team_id"
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "user_roles", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "role_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["role_id"], name: "index_user_roles_on_role_id"
+    t.index ["user_id"], name: "index_user_roles_on_user_id"
+  end
+
+  create_table "user_teams", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "team_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["team_id"], name: "index_user_teams_on_team_id"
+    t.index ["user_id", "team_id"], name: "index_user_teams_on_user_id_and_team_id", unique: true
+    t.index ["user_id"], name: "index_user_teams_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -36,6 +80,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_25_215415) do
     t.string "password_digest"
   end
 
-  add_foreign_key "user_roles", "role_ids"
-  add_foreign_key "user_roles", "user_ids"
+  add_foreign_key "event_team_users", "events"
+  add_foreign_key "event_team_users", "teams"
+  add_foreign_key "event_team_users", "users"
+  add_foreign_key "team_events", "events"
+  add_foreign_key "team_events", "teams"
+  add_foreign_key "user_roles", "roles"
+  add_foreign_key "user_roles", "users"
+  add_foreign_key "user_teams", "teams"
+  add_foreign_key "user_teams", "users"
 end

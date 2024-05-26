@@ -16,6 +16,12 @@ Rails.application.routes.draw do
         get :me
         post :create
       end
+      resources :organizations, only: [:create] 
+      resources :teams, only: [:create, :update] do
+        member do 
+          post :add_users
+        end
+      end
     end
   end
 end

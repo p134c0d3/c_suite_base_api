@@ -4,7 +4,7 @@ module Api
       skip_before_action :authenticate_request, only: %i[login create]
 
       def me
-        render_success(payload: UserBlueprint.render_as_hash(@current_user), status: 200)
+        render_success(payload: UserBlueprint.render_as_hash(@current_user, view: normal), status: 200)
       end
 
       def create
