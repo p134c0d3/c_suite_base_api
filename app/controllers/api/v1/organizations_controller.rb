@@ -4,6 +4,7 @@ module Api
       before_action :authenticate_request, except: [:create]
 
       def create
+        # Makes sure the params are being sent to the service correctly. 
         formatted_params = {organization: organization_params, user: user_params}
         result = BaseApi::Organizations.create_organization(formatted_params)
 

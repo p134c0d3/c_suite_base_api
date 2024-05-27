@@ -26,6 +26,17 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  # Method to get the user's roles as an array of role slugs
+  def user_roles
+    roles.pluck(:slug)
+  end
+
+  # Method to get the user's roles as a formatted string
+  # May add this to the user blueprint rather than the association.
+  def user_roles_string
+    roles.pluck(:slug).join(', ')
+  end
+
   # Methods END
   
 end
